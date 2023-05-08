@@ -7,9 +7,13 @@ import 'package:tiktok_clone/features/authentication/widgets/auth_button.dart';
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
-  void onSignupTap(BuildContext context) {
+  void _onSignupTap(BuildContext context) {
     Navigator.of(context).pop();
   }
+
+  void _onEmailTap(BuildContext context) {}
+
+  void _onAppleTap(BuildContext context) {}
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +22,9 @@ class LoginScreen extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: Sizes.size40),
           child: Column(
-            children: const [
+            children: [
               Gaps.v80,
-              Text(
+              const Text(
                 "Log in to TikTok",
                 style: TextStyle(
                   fontSize: Sizes.size24,
@@ -28,7 +32,7 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               Gaps.v20,
-              Text(
+              const Text(
                 "Manage your account, check notifications, comment on videos, and more.",
                 style: TextStyle(
                   fontSize: Sizes.size16,
@@ -38,12 +42,14 @@ class LoginScreen extends StatelessWidget {
               ),
               Gaps.v40,
               AuthButton(
-                faIcon: FaIcon(FontAwesomeIcons.user),
+                onTap: _onEmailTap,
+                faIcon: const FaIcon(FontAwesomeIcons.user),
                 text: "Use email & password",
               ),
               Gaps.v16,
               AuthButton(
-                faIcon: FaIcon(FontAwesomeIcons.apple),
+                onTap: _onAppleTap,
+                faIcon: const FaIcon(FontAwesomeIcons.apple),
                 text: "Continue with Apple",
               ),
             ],
@@ -52,12 +58,12 @@ class LoginScreen extends StatelessWidget {
       ),
       bottomNavigationBar: BottomAppBar(
         elevation: 2,
-        color: Colors.grey.shade100,
+        color: Colors.grey.shade50,
         child: Container(
           decoration: BoxDecoration(
             border: Border(
                 top: BorderSide(
-              color: Colors.grey.shade300,
+              color: Colors.grey.shade200,
               width: 1,
             )),
           ),
@@ -74,7 +80,7 @@ class LoginScreen extends StatelessWidget {
                 ),
                 Gaps.h5,
                 GestureDetector(
-                  onTap: () => onSignupTap(context),
+                  onTap: () => _onSignupTap(context),
                   child: Text(
                     "Sign Up",
                     style: TextStyle(
