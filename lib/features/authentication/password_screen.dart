@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
+import 'package:tiktok_clone/features/authentication/birthday_screen.dart';
 import 'package:tiktok_clone/features/authentication/widgets/form_button.dart';
 
 class PasswordScreen extends StatefulWidget {
@@ -11,21 +13,24 @@ class PasswordScreen extends StatefulWidget {
 }
 
 class _PasswordScreenState extends State<PasswordScreen> {
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
-  String _email = "";
+  String _password = "";
+  bool _hidePassword = true;
 
-  String? _isEmailValid() {
-    if (_email.isEmpty) return null;
+  bool _isPasswordValid() {
+    return _isLengthValid() && _isCombinationValid();
+  }
 
-    final regExp = RegExp(
-        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+  bool _isLengthValid() {
+    final r = RegExp(r'^.{8,20}$');
+    return r.hasMatch(_password);
+  }
 
-    if (!regExp.hasMatch(_email)) {
-      return "Email Not Valid";
-    }
-
-    return null;
+  bool _isCombinationValid() {
+    final r = RegExp(
+        r'^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};\\|,.<>/?])[a-zA-Z\d!@#$%^&*()_+\-=[\]{};\\|,.<>/?]{8,20}$');
+    return r.hasMatch(_password);
   }
 
   void _onScaffoldTap() {
@@ -33,26 +38,42 @@ class _PasswordScreenState extends State<PasswordScreen> {
   }
 
   void onSubmit() {
-    if (_email.isEmpty || _isEmailValid() != null) return;
+    if (_password.isEmpty || !_isPasswordValid()) return;
     _onNextTap(context);
   }
 
-  void _onNextTap(BuildContext context) {}
+  void _onNextTap(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const BirthdayScreen(),
+      ),
+    );
+  }
+
+  void _onClearTap() {
+    _passwordController.clear();
+  }
+
+  void _toggleHidePassword() {
+    setState(() {
+      _hidePassword = !_hidePassword;
+    });
+  }
 
   @override
   void initState() {
     super.initState();
 
-    _emailController.addListener(() {
+    _passwordController.addListener(() {
       setState(() {
-        _email = _emailController.text;
+        _password = _passwordController.text;
       });
     });
   }
 
   @override
   void dispose() {
-    _emailController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
@@ -75,29 +96,44 @@ class _PasswordScreenState extends State<PasswordScreen> {
             children: [
               Gaps.v20,
               const Text(
-                "What is your email?",
+                "Create password",
                 style: TextStyle(
                   fontSize: Sizes.size20,
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              Gaps.v10,
-              const Text(
-                "You can always change this later.",
-                style: TextStyle(
-                  fontSize: Sizes.size16,
-                  color: Colors.black54,
-                ),
-              ),
               Gaps.v32,
               TextField(
-                controller: _emailController,
-                keyboardType: TextInputType.emailAddress,
+                controller: _passwordController,
                 autocorrect: false,
+                obscureText: _hidePassword,
                 decoration: InputDecoration(
-                  hintText: "Email",
+                  suffix: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      GestureDetector(
+                        onTap: _onClearTap,
+                        child: FaIcon(
+                          FontAwesomeIcons.solidCircleXmark,
+                          color: Colors.grey.shade500,
+                          size: Sizes.size20,
+                        ),
+                      ),
+                      Gaps.h16,
+                      GestureDetector(
+                        onTap: _toggleHidePassword,
+                        child: FaIcon(
+                          _hidePassword
+                              ? FontAwesomeIcons.eye
+                              : FontAwesomeIcons.eyeSlash,
+                          color: Colors.grey.shade500,
+                          size: Sizes.size20,
+                        ),
+                      ),
+                    ],
+                  ),
+                  hintText: "Make it strong!",
                   hintStyle: TextStyle(color: Colors.grey.shade400),
-                  errorText: _isEmailValid(),
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
                       color: Colors.grey.shade400,
@@ -111,9 +147,44 @@ class _PasswordScreenState extends State<PasswordScreen> {
                 ),
                 cursorColor: Theme.of(context).primaryColor,
               ),
+              Gaps.v10,
+              const Text(
+                "Your password must have:",
+                style: TextStyle(
+                  fontSize: Sizes.size14,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              Gaps.v10,
+              Row(
+                children: [
+                  FaIcon(
+                    FontAwesomeIcons.circleCheck,
+                    size: Sizes.size20,
+                    color:
+                        _isLengthValid() ? Colors.green : Colors.grey.shade400,
+                  ),
+                  Gaps.h5,
+                  const Text("8 to 20 characters"),
+                ],
+              ),
+              Gaps.v5,
+              Row(
+                children: [
+                  FaIcon(
+                    FontAwesomeIcons.circleCheck,
+                    size: Sizes.size20,
+                    color: _isCombinationValid()
+                        ? Colors.green
+                        : Colors.grey.shade400,
+                  ),
+                  Gaps.h5,
+                  const Text("Letters, numbers, and special characters"),
+                ],
+              ),
               Gaps.v32,
               FormButton(
-                disabled: _email.isEmpty || _isEmailValid() != null,
+                disabled: _password.isEmpty || !_isPasswordValid(),
                 text: "Next",
                 onTap: _onNextTap,
               ),
