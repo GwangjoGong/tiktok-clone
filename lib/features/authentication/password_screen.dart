@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
-import 'package:tiktok_clone/features/authentication/password_screen.dart';
 import 'package:tiktok_clone/features/authentication/widgets/form_button.dart';
 
-class EmailScreen extends StatefulWidget {
-  const EmailScreen({super.key});
+class PasswordScreen extends StatefulWidget {
+  const PasswordScreen({super.key});
 
   @override
-  State<EmailScreen> createState() => _EmailScreenState();
+  State<PasswordScreen> createState() => _PasswordScreenState();
 }
 
-class _EmailScreenState extends State<EmailScreen> {
+class _PasswordScreenState extends State<PasswordScreen> {
   final TextEditingController _emailController = TextEditingController();
 
   String _email = "";
@@ -33,18 +32,12 @@ class _EmailScreenState extends State<EmailScreen> {
     FocusScope.of(context).unfocus();
   }
 
-  void _onSubmit() {
+  void onSubmit() {
     if (_email.isEmpty || _isEmailValid() != null) return;
     _onNextTap(context);
   }
 
-  void _onNextTap(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const PasswordScreen(),
-      ),
-    );
-  }
+  void _onNextTap(BuildContext context) {}
 
   @override
   void initState() {
@@ -100,7 +93,6 @@ class _EmailScreenState extends State<EmailScreen> {
               TextField(
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
-                onEditingComplete: _onSubmit,
                 autocorrect: false,
                 decoration: InputDecoration(
                   hintText: "Email",
