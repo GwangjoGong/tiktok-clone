@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
+import 'package:tiktok_clone/features/onboarding/tutorial_screen.dart';
 import 'package:tiktok_clone/features/onboarding/widgets/interest_button.dart';
 
 const interests = [
@@ -77,6 +78,11 @@ class _InterestsScreenState extends State<InterestsScreen> {
         showAppbar = false;
       });
     }
+  }
+
+  void _onNextTap() {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const TutorialScreen()));
   }
 
   @override
@@ -172,19 +178,23 @@ class _InterestsScreenState extends State<InterestsScreen> {
                 ),
                 Gaps.h10,
                 Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: Sizes.size14),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                    ),
-                    child: const Text(
-                      "Next",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: Sizes.size16,
-                        color: Colors.white,
+                  child: GestureDetector(
+                    onTap: _onNextTap,
+                    child: Container(
+                      padding:
+                          const EdgeInsets.symmetric(vertical: Sizes.size14),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
                       ),
-                      textAlign: TextAlign.center,
+                      child: const Text(
+                        "Next",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: Sizes.size16,
+                          color: Colors.white,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
                 ),
