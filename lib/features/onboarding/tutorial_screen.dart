@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
+import 'package:tiktok_clone/features/main/main_navigation_screen.dart';
 
 enum Page { first, second }
 
@@ -30,6 +31,13 @@ class _TutorialScreenState extends State<TutorialScreen> {
         _swiped = false;
       });
     }
+  }
+
+  void _onStartWathing() {
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const MainNavigationScreen()),
+        (route) => false);
   }
 
   @override
@@ -99,7 +107,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
                   opacity: _swiped ? 1 : 0,
                   duration: const Duration(milliseconds: 200),
                   child: CupertinoButton(
-                      onPressed: () {},
+                      onPressed: _onStartWathing,
                       color: Theme.of(context).primaryColor,
                       child: const Text("Start watching")),
                 ))),
