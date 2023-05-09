@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_swipe_detector/flutter_swipe_detector.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
+
+enum Page { first, second }
 
 class TutorialScreen extends StatefulWidget {
   const TutorialScreen({super.key});
@@ -13,110 +15,94 @@ class TutorialScreen extends StatefulWidget {
 class _TutorialScreenState extends State<TutorialScreen> {
   bool _swiped = false;
 
-  void _onSwipeUp(Offset offset) {
-    setState(() {
-      _swiped = true;
-    });
+  void _onPanEnd(DragEndDetails details) {
+    final yVelocity = details.velocity.pixelsPerSecond.dy;
+    const threshold = 400;
+
+    if (yVelocity < -threshold) {
+      setState(() {
+        _swiped = true;
+      });
+    }
+
+    if (yVelocity > threshold) {
+      setState(() {
+        _swiped = false;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: SwipeDetector(
-          onSwipeUp: _onSwipeUp,
+    return GestureDetector(
+      onPanEnd: _onPanEnd,
+      child: Scaffold(
+        body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: Sizes.size24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Gaps.v44,
-                const Text(
-                  "Swipe up",
-                  style: TextStyle(
-                      fontSize: Sizes.size40, fontWeight: FontWeight.bold),
-                ),
-                Gaps.v20,
-                const Text(
-                  "Videos are personalized for you based on what you watch, like, and share.",
-                  style: TextStyle(
-                    fontSize: Sizes.size20,
-                  ),
-                ),
-                Gaps.v44,
-                Flexible(
-                  child: FractionallySizedBox(
-                    heightFactor: 1,
-                    widthFactor: 1,
-                    child: Stack(
-                      children: [
-                        Container(
-                          decoration: const BoxDecoration(
-                            color: Colors.amber,
-                          ),
-                          child: const Center(
-                            child: Text(
-                              "Swipe me up",
-                              style: TextStyle(
-                                  fontSize: Sizes.size48, color: Colors.white),
-                            ),
-                          ),
-                        ),
-                        AnimatedContainer(
-                          duration: const Duration(milliseconds: 200),
-                          curve: Curves.fastOutSlowIn,
-                          margin: EdgeInsets.only(top: _swiped ? 0 : 1000),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor,
-                          ),
-                          child: const Center(
-                            child: Text(
-                              "There you go!",
-                              style: TextStyle(
-                                  fontSize: Sizes.size48, color: Colors.white),
-                            ),
-                          ),
-                        ),
-                      ],
+            child: AnimatedCrossFade(
+              duration: const Duration(milliseconds: 200),
+              crossFadeState: _swiped
+                  ? CrossFadeState.showSecond
+                  : CrossFadeState.showFirst,
+              firstChild: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  Gaps.v44,
+                  Text(
+                    "Swipe up",
+                    style: TextStyle(
+                      fontSize: Sizes.size40,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                ),
-                Gaps.v44,
-              ],
-            ),
-          ),
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        elevation: 0,
-        child: Padding(
-          padding: const EdgeInsets.only(
-            left: Sizes.size24,
-            right: Sizes.size24,
-            bottom: Sizes.size10,
-          ),
-          child: AnimatedOpacity(
-            opacity: _swiped ? 1 : 0,
-            duration: const Duration(milliseconds: 200),
-            curve: Curves.easeInOut,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-                borderRadius: BorderRadius.circular(Sizes.size4),
+                  Gaps.v16,
+                  Text(
+                    "Videos are personalized for you based on what you watch, like, and share.",
+                    style: TextStyle(
+                      fontSize: Sizes.size20,
+                    ),
+                  )
+                ],
               ),
-              padding: const EdgeInsets.symmetric(vertical: Sizes.size20),
-              child: const Text(
-                "Start watching",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: Sizes.size16,
-                  fontWeight: FontWeight.w600,
-                ),
-                textAlign: TextAlign.center,
+              secondChild: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  Gaps.v44,
+                  Text(
+                    "There you go!",
+                    style: TextStyle(
+                      fontSize: Sizes.size40,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Gaps.v16,
+                  Text(
+                    "Congratulation! Enjoy the awesome videos of tiktok from now on.",
+                    style: TextStyle(
+                      fontSize: Sizes.size20,
+                    ),
+                  )
+                ],
               ),
             ),
           ),
         ),
+        bottomNavigationBar: BottomAppBar(
+            elevation: 0,
+            child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: Sizes.size24,
+                  vertical: Sizes.size24,
+                ),
+                child: AnimatedOpacity(
+                  opacity: _swiped ? 1 : 0,
+                  duration: const Duration(milliseconds: 200),
+                  child: CupertinoButton(
+                      onPressed: () {},
+                      color: Theme.of(context).primaryColor,
+                      child: const Text("Start watching")),
+                ))),
       ),
     );
   }
