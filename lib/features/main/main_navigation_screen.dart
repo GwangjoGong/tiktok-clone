@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
-import 'package:tiktok_clone/features/main/stf_screen.dart';
 import 'package:tiktok_clone/features/main/widgets/navigation_tab.dart';
+import 'package:tiktok_clone/features/videos/video_timeline_screen.dart';
 
 class MainNavigationScreen extends StatefulWidget {
   const MainNavigationScreen({super.key});
@@ -13,12 +13,11 @@ class MainNavigationScreen extends StatefulWidget {
 
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
   final screens = [
-    // const Center(child: Text("Home")),
-    StfScreen(key: GlobalKey()),
-    StfScreen(key: GlobalKey()),
+    const VideoTimelineScreen(),
+    Container(),
     const Center(child: Text("Add")),
-    StfScreen(key: GlobalKey()),
-    StfScreen(key: GlobalKey()),
+    Container(),
+    Container(),
   ];
 
   int _selectedIndex = 0;
