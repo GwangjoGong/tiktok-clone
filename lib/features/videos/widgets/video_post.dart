@@ -15,9 +15,14 @@ class VideoPost extends StatefulWidget {
   State<VideoPost> createState() => _VideoPostState();
 }
 
-class _VideoPostState extends State<VideoPost> {
+class _VideoPostState extends State<VideoPost>
+    with SingleTickerProviderStateMixin {
   final VideoPlayerController _videoPlayerController =
       VideoPlayerController.asset("assets/videos/sample.mp4");
+
+  late final AnimationController _animationController;
+
+  bool _isPlaying = true;
 
   void _initVideoPlayer() async {
     await _videoPlayerController.initialize();
@@ -40,21 +45,42 @@ class _VideoPostState extends State<VideoPost> {
   void _onVisibilityChanged(VisibilityInfo info) {
     if (info.visibleFraction == 1 && !_videoPlayerController.value.isPlaying) {
       _videoPlayerController.play();
+
+      setState(() {
+        _isPlaying = true;
+      });
     }
   }
 
   void _togglePlay() {
     if (_videoPlayerController.value.isPlaying) {
       _videoPlayerController.pause();
+      _animationController.reverse();
     } else {
       _videoPlayerController.play();
+      _animationController.forward();
     }
+    setState(() {
+      _isPlaying = !_isPlaying;
+    });
   }
 
   @override
   void initState() {
     super.initState();
     _initVideoPlayer();
+
+    _animationController = AnimationController(
+      vsync: this,
+      lowerBound: 1.0,
+      upperBound: 1.5,
+      value: 1.5,
+      duration: const Duration(milliseconds: 200),
+    );
+
+    _animationController.addListener(() {
+      setState(() {});
+    });
   }
 
   @override
@@ -76,13 +102,21 @@ class _VideoPostState extends State<VideoPost> {
                 : Container(color: Colors.black),
           ),
           Positioned.fill(child: GestureDetector(onTap: _togglePlay)),
-          const Positioned.fill(
+          Positioned.fill(
             child: IgnorePointer(
-              child: Center(
-                child: FaIcon(
-                  FontAwesomeIcons.play,
-                  color: Colors.white,
-                  size: Sizes.size48,
+              child: Transform.scale(
+                scale: _animationController.value,
+                child: AnimatedOpacity(
+                  opacity: _isPlaying ? 0 : 1,
+                  curve: Curves.fastOutSlowIn,
+                  duration: const Duration(milliseconds: 200),
+                  child: const Center(
+                    child: FaIcon(
+                      FontAwesomeIcons.play,
+                      color: Colors.white,
+                      size: Sizes.size48,
+                    ),
+                  ),
                 ),
               ),
             ),
