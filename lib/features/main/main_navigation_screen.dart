@@ -28,7 +28,15 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: screens[_selectedIndex],
+      body: Stack(
+        children: [
+          for (var screen in screens)
+            Offstage(
+              offstage: _selectedIndex != screens.indexOf(screen),
+              child: screen,
+            ),
+        ],
+      ),
       bottomNavigationBar: BottomAppBar(
         color: Colors.black,
         child: Padding(

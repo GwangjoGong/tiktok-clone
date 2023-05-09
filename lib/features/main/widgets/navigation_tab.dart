@@ -21,6 +21,7 @@ class NavigationTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: onTap,
         child: AnimatedOpacity(
           opacity: isSelected ? 1 : 0.6,
