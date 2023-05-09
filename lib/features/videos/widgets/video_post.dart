@@ -77,10 +77,6 @@ class _VideoPostState extends State<VideoPost>
       value: 1.5,
       duration: const Duration(milliseconds: 200),
     );
-
-    _animationController.addListener(() {
-      setState(() {});
-    });
   }
 
   @override
@@ -104,8 +100,12 @@ class _VideoPostState extends State<VideoPost>
           Positioned.fill(child: GestureDetector(onTap: _togglePlay)),
           Positioned.fill(
             child: IgnorePointer(
-              child: Transform.scale(
-                scale: _animationController.value,
+              child: AnimatedBuilder(
+                animation: _animationController,
+                builder: (context, child) => Transform.scale(
+                  scale: _animationController.value,
+                  child: child,
+                ),
                 child: AnimatedOpacity(
                   opacity: _isPlaying ? 0 : 1,
                   curve: Curves.fastOutSlowIn,
