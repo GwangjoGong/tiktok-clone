@@ -58,6 +58,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                 isSelected: _selectedIndex == 1,
                 onTap: () => _onTap(1),
               ),
+              const PostVideoButton(),
               NavigationTab(
                 icon: FontAwesomeIcons.message,
                 selectedIcon: FontAwesomeIcons.solidMessage,
@@ -71,6 +72,90 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                 label: "Profile",
                 isSelected: _selectedIndex == 4,
                 onTap: () => _onTap(4),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class PostVideoButton extends StatefulWidget {
+  const PostVideoButton({
+    super.key,
+  });
+
+  @override
+  State<PostVideoButton> createState() => _PostVideoButtonState();
+}
+
+class _PostVideoButtonState extends State<PostVideoButton> {
+  bool _pressing = false;
+
+  void _openPostVideoScreen(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => Container(),
+        fullscreenDialog: true,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: () => _openPostVideoScreen(context),
+        onTapDown: (_) => setState(() => _pressing = true),
+        onTapUp: (_) => setState(() => _pressing = false),
+        onTapCancel: () => setState(() => _pressing = false),
+        behavior: HitTestBehavior.opaque,
+        child: AnimatedScale(
+          curve: Curves.fastOutSlowIn,
+          duration: const Duration(milliseconds: 200),
+          scale: _pressing ? 1.2 : 1,
+          child: Stack(
+            alignment: AlignmentDirectional.center,
+            children: [
+              Positioned(
+                right: 26,
+                child: Container(
+                  height: 36,
+                  width: 44,
+                  decoration: BoxDecoration(
+                    color: const Color(0xff61D4F0),
+                    borderRadius: BorderRadius.circular(Sizes.size11),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: Sizes.size8),
+                ),
+              ),
+              Positioned(
+                left: 26,
+                child: Container(
+                  height: 36,
+                  width: 44,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                    borderRadius: BorderRadius.circular(Sizes.size11),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: Sizes.size8),
+                ),
+              ),
+              Container(
+                height: 36,
+                width: 44,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(Sizes.size12),
+                ),
+                child: const Center(
+                  child: FaIcon(
+                    FontAwesomeIcons.plus,
+                    color: Colors.black,
+                    size: Sizes.size20,
+                  ),
+                ),
               )
             ],
           ),
