@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
+import 'package:tiktok_clone/features/videos/widgets/action_button.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -26,11 +28,11 @@ class _VideoPostState extends State<VideoPost>
 
   void _initVideoPlayer() async {
     await _videoPlayerController.initialize();
+    await _videoPlayerController.setLooping(true);
     setState(() {});
     _videoPlayerController.addListener(() {
       _onVideoChange();
     });
-    // _videoPlayerController.play();
   }
 
   void _onVideoChange() {
@@ -119,6 +121,63 @@ class _VideoPostState extends State<VideoPost>
                   ),
                 ),
               ),
+            ),
+          ),
+          Positioned(
+            bottom: Sizes.size24,
+            left: Sizes.size10,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                Text(
+                  "@GwangjoGong",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: Sizes.size16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Gaps.v12,
+                Text(
+                  "This is a sample video",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            bottom: Sizes.size24,
+            right: Sizes.size10,
+            child: Column(
+              children: [
+                const CircleAvatar(
+                  radius: Sizes.size24,
+                  foregroundImage: NetworkImage(
+                      'https://avatars.githubusercontent.com/u/43431790?v=4'),
+                  child: Text("G"),
+                ),
+                Gaps.v24,
+                ActionButton(
+                  icon: FontAwesomeIcons.solidHeart,
+                  label: "2.9M",
+                  onPressed: () {},
+                ),
+                Gaps.v24,
+                ActionButton(
+                  icon: FontAwesomeIcons.solidComment,
+                  label: "33.0K",
+                  onPressed: () {},
+                ),
+                Gaps.v24,
+                ActionButton(
+                  icon: FontAwesomeIcons.share,
+                  label: "Share",
+                  onPressed: () {},
+                ),
+              ],
             ),
           ),
         ],
