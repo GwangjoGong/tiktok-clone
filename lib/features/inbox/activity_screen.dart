@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
 
 class ActivityScreen extends StatefulWidget {
@@ -9,7 +10,8 @@ class ActivityScreen extends StatefulWidget {
   State<ActivityScreen> createState() => _ActivityScreenState();
 }
 
-class _ActivityScreenState extends State<ActivityScreen> {
+class _ActivityScreenState extends State<ActivityScreen>
+    with SingleTickerProviderStateMixin {
   final List<String> _notifications = [
     "1",
     "2",
@@ -19,10 +21,29 @@ class _ActivityScreenState extends State<ActivityScreen> {
     "6",
   ];
 
+  late final AnimationController _animationController = AnimationController(
+      duration: const Duration(milliseconds: 300), vsync: this);
+
+  late final Animation<double> _turnAnimation =
+      Tween(begin: 0.0, end: 0.5).animate(
+    CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.fastOutSlowIn,
+    ),
+  );
+
   void _onDismissed(String notification) {
     setState(() {
       _notifications.remove(notification);
     });
+  }
+
+  void _onTitleTap() {
+    if (_animationController.isCompleted) {
+      _animationController.reverse();
+    } else {
+      _animationController.forward();
+    }
   }
 
   @override
@@ -30,7 +51,23 @@ class _ActivityScreenState extends State<ActivityScreen> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text("All activity"),
+        title: GestureDetector(
+          onTap: _onTitleTap,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text("All activity"),
+              Gaps.h4,
+              RotationTransition(
+                turns: _turnAnimation,
+                child: const FaIcon(
+                  FontAwesomeIcons.chevronDown,
+                  size: Sizes.size12,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
       body: ListView(
         children: [
