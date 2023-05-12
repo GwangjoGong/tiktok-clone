@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
+import 'package:tiktok_clone/features/discover/discover_screen.dart';
 import 'package:tiktok_clone/features/main/widgets/navigation_tab.dart';
 import 'package:tiktok_clone/features/videos/video_timeline_screen.dart';
 
@@ -14,7 +15,7 @@ class MainNavigationScreen extends StatefulWidget {
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
   final screens = [
     const VideoTimelineScreen(),
-    Container(),
+    const DiscoverScreen(),
     const Center(child: Text("Add")),
     Container(),
     Container(),
@@ -39,7 +40,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         ],
       ),
       bottomNavigationBar: BottomAppBar(
-        color: Colors.black,
+        color: _selectedIndex == 0 ? Colors.black : Colors.white,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: Sizes.size12),
           child: Row(
@@ -51,6 +52,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                 label: "Home",
                 isSelected: _selectedIndex == 0,
                 onTap: () => _onTap(0),
+                dark: _selectedIndex == 0,
               ),
               NavigationTab(
                 icon: FontAwesomeIcons.compass,
@@ -58,14 +60,18 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                 label: "Discover",
                 isSelected: _selectedIndex == 1,
                 onTap: () => _onTap(1),
+                dark: _selectedIndex == 0,
               ),
-              const PostVideoButton(),
+              PostVideoButton(
+                dark: _selectedIndex == 0,
+              ),
               NavigationTab(
                 icon: FontAwesomeIcons.message,
                 selectedIcon: FontAwesomeIcons.solidMessage,
                 label: "Inbox",
                 isSelected: _selectedIndex == 3,
                 onTap: () => _onTap(3),
+                dark: _selectedIndex == 0,
               ),
               NavigationTab(
                 icon: FontAwesomeIcons.user,
@@ -73,6 +79,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                 label: "Profile",
                 isSelected: _selectedIndex == 4,
                 onTap: () => _onTap(4),
+                dark: _selectedIndex == 0,
               )
             ],
           ),
@@ -83,8 +90,11 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
 }
 
 class PostVideoButton extends StatefulWidget {
+  final bool dark;
+
   const PostVideoButton({
     super.key,
+    required this.dark,
   });
 
   @override
@@ -147,13 +157,13 @@ class _PostVideoButtonState extends State<PostVideoButton> {
                 height: 36,
                 width: 44,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: widget.dark ? Colors.white : Colors.black,
                   borderRadius: BorderRadius.circular(Sizes.size12),
                 ),
-                child: const Center(
+                child: Center(
                   child: FaIcon(
                     FontAwesomeIcons.plus,
-                    color: Colors.black,
+                    color: widget.dark ? Colors.black : Colors.white,
                     size: Sizes.size20,
                   ),
                 ),
