@@ -11,6 +11,8 @@ class VideoComments extends StatefulWidget {
 }
 
 class _VideoCommentsState extends State<VideoComments> {
+  final ScrollController _scrollController = ScrollController();
+
   void _onClosePressed() {
     Navigator.of(context).pop();
   }
@@ -49,59 +51,65 @@ class _VideoCommentsState extends State<VideoComments> {
           onTap: _onBodyTap,
           child: Stack(
             children: [
-              ListView.separated(
-                padding: const EdgeInsets.symmetric(
-                  vertical: Sizes.size10,
-                  horizontal: Sizes.size16,
-                ),
-                separatorBuilder: (context, index) {
-                  return Gaps.v20;
-                },
-                itemCount: 10,
-                itemBuilder: (context, index) {
-                  return Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CircleAvatar(
-                        radius: Sizes.size20,
-                        backgroundColor: Colors.grey.shade200,
-                        child: const Text('G'),
-                      ),
-                      Gaps.h10,
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Gaps.v4,
-                            Text(
-                              "Gwangjo Gong",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey.shade600,
+              Scrollbar(
+                controller: _scrollController,
+                child: ListView.separated(
+                  controller: _scrollController,
+                  padding: const EdgeInsets.only(
+                    top: Sizes.size10,
+                    left: Sizes.size16,
+                    right: Sizes.size16,
+                    bottom: Sizes.size96 + Sizes.size10,
+                  ),
+                  separatorBuilder: (context, index) {
+                    return Gaps.v20;
+                  },
+                  itemCount: 10,
+                  itemBuilder: (context, index) {
+                    return Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CircleAvatar(
+                          radius: Sizes.size20,
+                          backgroundColor: Colors.grey.shade200,
+                          child: const Text('G'),
+                        ),
+                        Gaps.h10,
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Gaps.v4,
+                              Text(
+                                "Gwangjo Gong",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey.shade600,
+                                ),
                               ),
-                            ),
-                            Gaps.v4,
-                            const Text(
-                              "That's not it I've seen the same thing but also in a cave",
-                              style: TextStyle(fontSize: Sizes.size16),
+                              Gaps.v4,
+                              const Text(
+                                "That's not it I've seen the same thing but also in a cave",
+                                style: TextStyle(fontSize: Sizes.size16),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Gaps.h16,
+                        Column(
+                          children: [
+                            Icon(Icons.favorite_border,
+                                color: Colors.grey.shade600),
+                            Text(
+                              "31.9K",
+                              style: TextStyle(color: Colors.grey.shade600),
                             ),
                           ],
-                        ),
-                      ),
-                      Gaps.h16,
-                      Column(
-                        children: [
-                          Icon(Icons.favorite_border,
-                              color: Colors.grey.shade600),
-                          Text(
-                            "31.9K",
-                            style: TextStyle(color: Colors.grey.shade600),
-                          ),
-                        ],
-                      )
-                    ],
-                  );
-                },
+                        )
+                      ],
+                    );
+                  },
+                ),
               ),
               Positioned(
                 bottom: 0,
