@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/features/discover/discover_screen.dart';
+import 'package:tiktok_clone/features/inbox/inbox_screen.dart';
 import 'package:tiktok_clone/features/main/widgets/navigation_tab.dart';
 import 'package:tiktok_clone/features/videos/video_timeline_screen.dart';
 
@@ -15,9 +16,9 @@ class MainNavigationScreen extends StatefulWidget {
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
   final screens = [
     const VideoTimelineScreen(),
-    DiscoverScreen(),
+    const DiscoverScreen(),
     const Center(child: Text("Add")),
-    Container(),
+    const InboxScreeen(),
     Container(),
   ];
 
