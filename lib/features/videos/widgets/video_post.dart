@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/features/videos/widgets/action_button.dart';
+import 'package:tiktok_clone/features/videos/widgets/video_comments.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -30,6 +31,7 @@ class _VideoPostState extends State<VideoPost>
     await _videoPlayerController.initialize();
     await _videoPlayerController.setLooping(true);
     setState(() {});
+    _videoPlayerController.play();
     _videoPlayerController.addListener(() {
       _onVideoChange();
     });
@@ -45,12 +47,10 @@ class _VideoPostState extends State<VideoPost>
   }
 
   void _onVisibilityChanged(VisibilityInfo info) {
-    if (info.visibleFraction == 1 && !_videoPlayerController.value.isPlaying) {
+    if (info.visibleFraction == 1 &&
+        _isPlaying &&
+        !_videoPlayerController.value.isPlaying) {
       _videoPlayerController.play();
-
-      setState(() {
-        _isPlaying = true;
-      });
     }
   }
 
@@ -65,6 +65,24 @@ class _VideoPostState extends State<VideoPost>
     setState(() {
       _isPlaying = !_isPlaying;
     });
+  }
+
+  void _onCommentsTap() async {
+    if (_videoPlayerController.value.isPlaying) {
+      _togglePlay();
+    }
+
+    await showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(Sizes.size10)),
+      ),
+      builder: (context) => const VideoComments(),
+    );
+
+    if (!_videoPlayerController.value.isPlaying) {
+      _togglePlay();
+    }
   }
 
   @override
@@ -169,7 +187,7 @@ class _VideoPostState extends State<VideoPost>
                 ActionButton(
                   icon: FontAwesomeIcons.solidComment,
                   label: "33.0K",
-                  onPressed: () {},
+                  onPressed: _onCommentsTap,
                 ),
                 Gaps.v24,
                 ActionButton(
