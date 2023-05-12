@@ -22,6 +22,7 @@ class TiktokApp extends StatelessWidget {
           selectionColor: const Color(0xFFE9435A).withOpacity(0.3),
           selectionHandleColor: const Color(0xFFE9435A),
         ),
+        splashColor: Colors.transparent,
         appBarTheme: const AppBarTheme(
           foregroundColor: Colors.black,
           backgroundColor: Colors.white,
