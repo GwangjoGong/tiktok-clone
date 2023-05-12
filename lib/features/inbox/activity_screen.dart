@@ -67,18 +67,33 @@ class _ActivityScreenState extends State<ActivityScreen>
     ),
   );
 
+  late final Animation<Color?> _barrierAnimation =
+      ColorTween(begin: Colors.transparent, end: Colors.black.withAlpha(150))
+          .animate(
+    CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.fastOutSlowIn,
+    ),
+  );
+
+  bool _showBarrier = false;
+
   void _onDismissed(String notification) {
     setState(() {
       _notifications.remove(notification);
     });
   }
 
-  void _onTitleTap() {
+  void _toggleAnimations() async {
     if (_animationController.isCompleted) {
-      _animationController.reverse();
+      await _animationController.reverse();
     } else {
       _animationController.forward();
     }
+
+    setState(() {
+      _showBarrier = !_showBarrier;
+    });
   }
 
   @override
@@ -87,7 +102,7 @@ class _ActivityScreenState extends State<ActivityScreen>
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: GestureDetector(
-          onTap: _onTitleTap,
+          onTap: _toggleAnimations,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -184,6 +199,12 @@ class _ActivityScreenState extends State<ActivityScreen>
                 ),
             ],
           ),
+          if (_showBarrier)
+            AnimatedModalBarrier(
+              color: _barrierAnimation,
+              dismissible: true,
+              onDismiss: _toggleAnimations,
+            ),
           SlideTransition(
             position: _slideAnimation,
             child: Container(
@@ -216,11 +237,11 @@ class _ActivityScreenState extends State<ActivityScreen>
                           ),
                         ],
                       ),
-                    )
+                    ),
                 ],
               ),
             ),
-          )
+          ),
         ],
       ),
     );
