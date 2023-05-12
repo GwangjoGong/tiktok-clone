@@ -28,47 +28,66 @@ class ActivityScreen extends StatelessWidget {
               ),
             ),
           ),
-          ListTile(
-            leading: Container(
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.grey.shade300)),
-              width: Sizes.size52,
-              child: const Center(
-                  child: FaIcon(
-                FontAwesomeIcons.bell,
-                color: Colors.black,
-              )),
-            ),
-            title: RichText(
-              text: const TextSpan(
-                text: "Account updates: ",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black,
-                  fontSize: Sizes.size16,
-                ),
-                children: [
-                  TextSpan(
-                    text: "Upload longer videos ",
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                  TextSpan(
-                    text: "1h",
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: Colors.grey,
-                    ),
-                  ),
-                ],
+          Dismissible(
+            key: const Key("1"),
+            background: Container(
+              color: Colors.red,
+              alignment: Alignment.centerLeft,
+              child: const FaIcon(
+                FontAwesomeIcons.trash,
+                color: Colors.white,
               ),
             ),
-            trailing: FaIcon(
-              FontAwesomeIcons.chevronRight,
-              size: Sizes.size16,
-              color: Colors.grey.shade600,
+            secondaryBackground: Container(
+              color: Colors.green,
+              alignment: Alignment.centerRight,
+              child: const FaIcon(
+                FontAwesomeIcons.floppyDisk,
+                color: Colors.white,
+              ),
+            ),
+            child: ListTile(
+              leading: Container(
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.grey.shade300)),
+                width: Sizes.size52,
+                child: const Center(
+                    child: FaIcon(
+                  FontAwesomeIcons.bell,
+                  color: Colors.black,
+                )),
+              ),
+              title: RichText(
+                text: const TextSpan(
+                  text: "Account updates: ",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black,
+                    fontSize: Sizes.size16,
+                  ),
+                  children: [
+                    TextSpan(
+                      text: "Upload longer videos ",
+                      style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                    TextSpan(
+                      text: "1h",
+                      style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              trailing: FaIcon(
+                FontAwesomeIcons.chevronRight,
+                size: Sizes.size16,
+                color: Colors.grey.shade600,
+              ),
             ),
           )
         ],
