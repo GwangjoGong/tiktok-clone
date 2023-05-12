@@ -1,8 +1,19 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
 
-class DiscoverScreen extends StatelessWidget {
+class DiscoverScreen extends StatefulWidget {
+  const DiscoverScreen({super.key});
+
+  @override
+  State<DiscoverScreen> createState() => _DiscoverScreenState();
+}
+
+class _DiscoverScreenState extends State<DiscoverScreen> {
+  final TextEditingController _searchController = TextEditingController();
+
   final tabs = [
     'Top',
     'Users',
@@ -13,20 +24,114 @@ class DiscoverScreen extends StatelessWidget {
     'Brands'
   ];
 
-  DiscoverScreen({super.key});
+  bool _isWriting = false;
+  bool _clearable = false;
+
+  void _onTabTap() {
+    FocusScope.of(context).unfocus();
+  }
+
+  void _onBackTap() {
+    if (Navigator.canPop(context)) {
+      Navigator.pop(context);
+    } else {
+      //TODO
+    }
+  }
+
+  void _onMenuTap() {}
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: tabs.length,
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           elevation: 1,
-          title: Row(children: const [
-            Icon(Icons.search),
-            SizedBox(width: Sizes.size10),
-            Text('Search'),
-          ]),
+          title: Row(
+            children: [
+              GestureDetector(
+                onTap: _onBackTap,
+                child: const Icon(
+                  FontAwesomeIcons.chevronLeft,
+                  color: Colors.black,
+                  size: Sizes.size24,
+                ),
+              ),
+              Gaps.h10,
+              Expanded(
+                child: Container(
+                  height: Sizes.size44,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade100,
+                    borderRadius: BorderRadius.circular(Sizes.size6),
+                  ),
+                  child: TextField(
+                    textAlignVertical: TextAlignVertical.center,
+                    controller: _searchController,
+                    onTap: () {
+                      setState(() {
+                        _isWriting = true;
+                      });
+                    },
+                    onChanged: (value) {
+                      setState(() {
+                        _clearable = value.isNotEmpty;
+                      });
+                    },
+                    onSubmitted: (value) {
+                      setState(() {
+                        _isWriting = false;
+                      });
+                    },
+                    decoration: InputDecoration(
+                      hintText: 'Search',
+                      hintStyle: const TextStyle(
+                        fontSize: Sizes.size16,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.grey,
+                      ),
+                      border: InputBorder.none,
+                      prefixIcon: const Icon(
+                        CupertinoIcons.search,
+                        color: Colors.black,
+                      ),
+                      isCollapsed: true,
+                      suffixIcon: _isWriting && _clearable
+                          ? GestureDetector(
+                              onTap: () {
+                                _searchController.clear();
+                                setState(() {
+                                  _clearable = false;
+                                });
+                              },
+                              child: Icon(
+                                CupertinoIcons.clear_circled_solid,
+                                color: Colors.grey.shade600,
+                              ),
+                            )
+                          : null,
+                    ),
+                  ),
+                ),
+              ),
+              Gaps.h16,
+              GestureDetector(
+                onTap: _onMenuTap,
+                child: const Icon(
+                  FontAwesomeIcons.bars,
+                  color: Colors.black,
+                ),
+              ),
+            ],
+          ),
           bottom: TabBar(
             isScrollable: true,
             splashFactory: NoSplash.splashFactory,
@@ -41,6 +146,9 @@ class DiscoverScreen extends StatelessWidget {
             unselectedLabelColor: Colors.grey.shade500,
             indicatorColor: Colors.black,
             indicatorWeight: 3,
+            onTap: (value) {
+              _onTabTap();
+            },
             tabs: [
               for (var tab in tabs) Tab(text: tab),
             ],
@@ -49,6 +157,7 @@ class DiscoverScreen extends StatelessWidget {
         body: TabBarView(
           children: [
             GridView.builder(
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
               padding: const EdgeInsets.symmetric(
                 horizontal: Sizes.size8,
                 vertical: Sizes.size8,
