@@ -1,14 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
 
-class DiscoverScreen extends StatefulWidget {
-  const DiscoverScreen({super.key});
-
-  @override
-  State<DiscoverScreen> createState() => _DiscoverScreenState();
-}
-
-class _DiscoverScreenState extends State<DiscoverScreen> {
+class DiscoverScreen extends StatelessWidget {
   final tabs = [
     'Top',
     'Users',
@@ -18,6 +11,8 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
     'Shopping',
     'Brands'
   ];
+
+  DiscoverScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +47,25 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
         ),
         body: TabBarView(
           children: [
-            for (var tab in tabs) Center(child: Text(tab)),
+            GridView.builder(
+              padding: const EdgeInsets.symmetric(
+                horizontal: Sizes.size8,
+                vertical: Sizes.size8,
+              ),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: Sizes.size10,
+                mainAxisSpacing: Sizes.size10,
+                childAspectRatio: 9 / 16,
+              ),
+              itemBuilder: (context, index) {
+                return Container(
+                  color: Colors.teal,
+                  child: Text('Top $index'),
+                );
+              },
+            ),
+            for (var tab in tabs.skip(1)) Center(child: Text(tab)),
           ],
         ),
       ),

@@ -15,7 +15,7 @@ class MainNavigationScreen extends StatefulWidget {
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
   final screens = [
     const VideoTimelineScreen(),
-    const DiscoverScreen(),
+    DiscoverScreen(),
     const Center(child: Text("Add")),
     Container(),
     Container(),
