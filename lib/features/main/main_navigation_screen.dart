@@ -21,7 +21,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     Container(),
   ];
 
-  int _selectedIndex = 0;
+  int _selectedIndex = 1;
 
   void _onTap(int index) => setState(() => _selectedIndex = index);
 
