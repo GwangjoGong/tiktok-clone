@@ -9,6 +9,12 @@ class ChatsScreen extends StatefulWidget {
 }
 
 class _ChatsScreenState extends State<ChatsScreen> {
+  final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
+
+  void _addItem() {
+    _listKey.currentState?.insertItem(0);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,40 +26,53 @@ class _ChatsScreenState extends State<ChatsScreen> {
             iconSize: Sizes.size32,
             splashRadius: Sizes.size20,
             icon: const Icon(Icons.add),
-            onPressed: () {},
+            onPressed: _addItem,
           ),
         ],
       ),
-      body: ListView(
+      body: AnimatedList(
+        key: _listKey,
         padding: const EdgeInsets.symmetric(vertical: Sizes.size10),
-        children: [
-          ListTile(
-            leading: const CircleAvatar(
-              radius: Sizes.size32,
-              child: Text('A'),
-            ),
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                const Text(
-                  "AntonioBM",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                  ),
+        itemBuilder: (context, index, animation) {
+          final curvedAnimation = animation.drive(
+            CurveTween(curve: Curves.fastOutSlowIn),
+          );
+
+          return FadeTransition(
+            key: UniqueKey(),
+            opacity: curvedAnimation,
+            child: SizeTransition(
+              sizeFactor: curvedAnimation,
+              child: ListTile(
+                leading: const CircleAvatar(
+                  radius: Sizes.size32,
+                  child: Text('A'),
                 ),
-                Text(
-                  "2:16 PM",
-                  style: TextStyle(
-                    color: Colors.grey.shade400,
-                    fontSize: Sizes.size14,
-                  ),
-                )
-              ],
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      "AntonioBM $index",
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Text(
+                      "2:16 PM",
+                      style: TextStyle(
+                        color: Colors.grey.shade400,
+                        fontSize: Sizes.size14,
+                      ),
+                    )
+                  ],
+                ),
+                subtitle: const Text("Say hi to AntonioBM"),
+              ),
             ),
-            subtitle: const Text("Say hi to AntonioBM"),
-          ),
-        ],
+          );
+        },
+        initialItemCount: 1,
       ),
     );
   }
