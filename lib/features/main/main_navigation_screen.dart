@@ -4,6 +4,7 @@ import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/features/discover/discover_screen.dart';
 import 'package:tiktok_clone/features/inbox/inbox_screen.dart';
 import 'package:tiktok_clone/features/main/widgets/navigation_tab.dart';
+import 'package:tiktok_clone/features/users/user_profile_screen.dart';
 import 'package:tiktok_clone/features/videos/video_timeline_screen.dart';
 
 class MainNavigationScreen extends StatefulWidget {
@@ -19,10 +20,10 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     const DiscoverScreen(),
     const Center(child: Text("Add")),
     const InboxScreeen(),
-    Container(),
+    const UserProfileScreen()
   ];
 
-  int _selectedIndex = 3;
+  int _selectedIndex = 4;
 
   void _onTap(int index) => setState(() => _selectedIndex = index);
 
