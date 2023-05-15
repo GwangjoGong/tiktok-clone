@@ -41,6 +41,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             ),
             itemExtent: 100,
           ),
+          SliverPersistentHeader(
+            delegate: CustomDelegate(),
+            pinned: true,
+          ),
           SliverGrid(
             delegate: SliverChildBuilderDelegate(
               (context, index) {
@@ -54,12 +58,39 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             ),
             gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                 maxCrossAxisExtent: 100,
-                mainAxisSpacing: Sizes.size10,
-                crossAxisSpacing: Sizes.size20,
+                mainAxisSpacing: Sizes.size20,
+                crossAxisSpacing: Sizes.size10,
                 childAspectRatio: 1 / 1),
           )
         ],
       ),
     );
+  }
+}
+
+class CustomDelegate extends SliverPersistentHeaderDelegate {
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+      color: Colors.red,
+      child: const FractionallySizedBox(
+        heightFactor: 1,
+        child: Center(
+          child: Text("TITLE"),
+        ),
+      ),
+    );
+  }
+
+  @override
+  double get maxExtent => 100;
+
+  @override
+  double get minExtent => 50;
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    return false;
   }
 }
